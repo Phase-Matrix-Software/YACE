@@ -1,8 +1,8 @@
 CPPS=$(wildcard *.cpp)
 OBJDIR=build
 OBJS=$(patsubst %.cpp,$(OBJDIR)/%.o,$(CPPS))
-CFLAGS+=
-LFLAGS+=
+CFLAGS+= -Wall -fPIC
+LFLAGS+= -shared
 OUT=$(OBJDIR)/libYACE.so
 
 .PHONY: all
@@ -13,7 +13,7 @@ clean:
 	rm -rf $(OBJDIR)
 
 $(OUT): $(OBJS)
-	$(CXX) $(LFLAGS) -o $@ $^
+	$(CXX) $(LFLAGS) $^ -o $@
 
 $(OBJDIR)/%.o: %.cpp
 	$(CXX) $(CFLAGS) -c -o $@ $<
