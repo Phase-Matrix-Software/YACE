@@ -3,9 +3,16 @@ OBJDIR=build
 OBJS=$(patsubst %.cpp,$(OBJDIR)/%.o,$(CPPS))
 CFLAGS+= -Wall -fPIC
 LFLAGS+= -shared
-OUT=$(OBJDIR)/libYACE.so
 
-.PHONY: all
+ifeq ($(OS),Windows_NT)
+	OBJDIR=build/windows
+	OUT=$(OBJDIR)/YACE.dll
+else
+	OBJDIR=build/linux
+	OUT=$(OBJDIR)/libYACE.so
+endif
+
+.PHONY: all clean
 
 all: $(OBJDIR) $(OUT)
 
@@ -19,5 +26,6 @@ $(OBJDIR)/%.o: %.cpp
 	$(CXX) $(CFLAGS) -c -o $@ $<
 
 $(OBJDIR):
-	mkdir $(OBJDIR)
+	mkdir -p $(OBJDIR)
 
+# vim: ai:ts=8:sw=8:tw=0:noet:
