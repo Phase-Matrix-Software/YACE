@@ -25,7 +25,7 @@
 #define YACE_INIT_RENDER  2
 #define YACE_INIT_AUDIO   4
 #define YACE_INIT_NETWORK 8
-#define YACE_INIT_ALL     16
+#define YACE_INIT_ALL     0xff
 
 namespace YACE {
 
@@ -40,6 +40,11 @@ namespace YACE {
      * @return true if core initialized successfully, false otherwise
      */
     bool game_init(bool isServer, const char* uniqueString, int flags);
+
+    /**
+     * Starts the main loop. Call all setup functions before this.
+     */
+    void game_loop();
 }
 
 #endif /* YACE_GAME_H */
