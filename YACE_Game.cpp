@@ -20,10 +20,11 @@
 
 #include "YACE_Game.h"
 #include "YACE_Timer.h"
-#include <stdio.h>
+#include "YACE_Logger.h"
+#include <vector>
 
 /*
- * Update every 60Hz
+ * Update at 60Hz
  */
 #define TARGET_TPS 60.f
 
@@ -58,8 +59,20 @@ static unsigned long long lastTicks = 0;  // total ticks as of last second
 
 static bool running;
 
+static std::vector<YACE::FuncPointer> updateHooks;
+static std::vector<YACE::FuncPointer> renderHooks;
+static std::vector<YACE::FuncPointer> cleanupHooks;
+
 bool YACE::game_init(bool isServer, const char* uniqueString, int flags)
 {
+    if (flags & YACE_INIT_DEBUG_OUTPUT) {
+        logger_setFlag(YACE_LOG_DEBUG, true);
+    }
+
+    if (flags & YACE_INIT_WARNING_OUTPUT) {
+        logger_setFlag(YACE_LOG_WARNING, false);
+    }
+
     return true;
 }
 
@@ -90,11 +103,17 @@ void YACE::game_loop()
         while (time >= LOOP_TIMING_ACCURACY / TARGET_TPS) {
             time -= LOOP_TIMING_ACCURACY / TARGET_TPS;
 
-            //update funcs;
+            for (FuncPointer hook : updateHooks) {
+                hook();
+            }
+
             ticks++;
         }
 
-        //render funcs
+        for (FuncPointer hook : renderHooks) {
+            hook();
+        }
+
         frames++;
 
         /*
@@ -107,7 +126,32 @@ void YACE::game_loop()
             tps = ticks - lastTicks;
             lastTicks = ticks;
             second.reset();
-            printf("TPS: %lu, FPS: %lu\n", tps, fps);
+            logger_debug("TPS: %lu, FPS: %lu\n", tps, fps);
         }
+    }
+}
+
+void YACE::game_addUpdateHook(FuncPointer function)
+{
+    updateHooks.push_back(function);
+}
+
+void YACE::game_addRenderHook(FuncPointer function)
+{
+    renderHooks.push_back(function);
+}
+
+void YACE::game_addCleanupHook(FuncPointer function)
+{
+    cleanupHooks.push_back(function);
+}
+
+void YACE::game_stop()
+{
+    running = false;
+
+    //Cleanup...
+    for (FuncPointer hook : cleanupHooks) {
+        hook();
     }
 }

@@ -21,13 +21,17 @@
 #ifndef YACE_GAME_H
 #define YACE_GAME_H
 
-#define YACE_INIT_WINDOW  1
-#define YACE_INIT_RENDER  2
-#define YACE_INIT_AUDIO   4
-#define YACE_INIT_NETWORK 8
+#define YACE_INIT_WINDOW         1
+#define YACE_INIT_RENDER         2
+#define YACE_INIT_AUDIO          4
+#define YACE_INIT_NETWORK        8
+#define YACE_INIT_DEBUG_OUTPUT   16
+#define YACE_INIT_WARNING_OUTPUT 32
 #define YACE_INIT_ALL     0xff
 
 namespace YACE {
+    //Function pointer to be used as arguments for hook functions
+    typedef void (*FuncPointer)();
 
     /**
      * This is the main init function to start the engine.
@@ -45,6 +49,29 @@ namespace YACE {
      * Starts the main loop. Call all setup functions before this.
      */
     void game_loop();
+
+    /**
+     * Stops the main loop and starts clean up (calls cleanup hooks).
+     */
+    void game_stop();
+
+    /**
+     * Register a render hook. Gets called during the main loop.
+     * @param function A pointer to a void funcion with no arguments.
+     */
+    void game_addRenderHook(FuncPointer function);
+
+    /**
+     * Register an update hook. Gets called during the main loop.
+     * @param function A pointer to a void funcion with no arguments.
+     */
+    void game_addUpdateHook(FuncPointer function);
+
+    /**
+     * Register a cleanup hook. Gets called when game_stop() is called.
+     * @param function A pointer to a void funcion with no arguments.
+     */
+    void game_addCleanupHook(FuncPointer function);
 }
 
 #endif /* YACE_GAME_H */

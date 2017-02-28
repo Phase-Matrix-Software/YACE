@@ -25,9 +25,9 @@
 #include <cstdio>
 #include <cstring>
 
-int flags = 0x00;
+static int flags = 0x00;
 
-void YACE::Logger_setFlag(int flag, bool value)
+void YACE::logger_setFlag(int flag, bool value)
 {
     if (value) {
         flags |= flag;
@@ -44,7 +44,8 @@ void getTime(char* buffer)
 }
 
 //TODO: Log to a file
-void output(std::FILE* stream, const char* type, char* msg, va_list argptr)
+void output(std::FILE* stream, const char* type, const char* msg,
+        va_list argptr)
 {
     char timebuf[10];
     char buffer[10 + 6 + 1 + strlen(msg) + 1];
@@ -53,7 +54,7 @@ void output(std::FILE* stream, const char* type, char* msg, va_list argptr)
     vfprintf(stream, buffer, argptr);
 }
 
-void YACE::Logger_debug(char* msg, ...)
+void YACE::logger_debug(const char* msg, ...)
 {
     if (!(flags & YACE_LOG_DEBUG)) return;
     va_list argptr;
@@ -62,7 +63,7 @@ void YACE::Logger_debug(char* msg, ...)
     va_end(argptr);
 }
 
-void YACE::Logger_warning(char* msg, ...)
+void YACE::logger_warning(const char* msg, ...)
 {
     if (!(flags & YACE_LOG_WARNING)) return;
     va_list argptr;
@@ -71,7 +72,7 @@ void YACE::Logger_warning(char* msg, ...)
     va_end(argptr);
 }
 
-void YACE::Logger_info(char* msg, ...)
+void YACE::logger_info(const char* msg, ...)
 {
     va_list argptr;
     va_start(argptr, msg);
@@ -79,7 +80,7 @@ void YACE::Logger_info(char* msg, ...)
     va_end(argptr);
 }
 
-void YACE::Logger_error(char* msg, ...)
+void YACE::logger_error(const char* msg, ...)
 {
     va_list argptr;
     va_start(argptr, msg);

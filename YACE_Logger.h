@@ -30,7 +30,7 @@ namespace YACE {
      * Sets a flag to give information about the logging. The available flags
      * to be used are YACE_LOG_*. Usually handled by the Game_init() function.
      */
-    void Logger_setFlag(int flag, bool value);
+    void logger_setFlag(int flag, bool value);
 
     /**
      * This function logs debug messages and is only recorded if the logger
@@ -38,13 +38,13 @@ namespace YACE {
      * automatically set by the Game_init() function. Disabled by default.
      * @param msg The message to be logged
      */
-    void Logger_debug(char* msg, ...);
+    void logger_debug(const char* msg, ...);
 
     /**
      * This function logs information messages.
      * @param msg The message to be logged
      */
-    void Logger_info(char* msg, ...);
+    void logger_info(const char* msg, ...);
 
     /**
      * This function logs warning messages (to the standard buffer) and is only
@@ -53,13 +53,13 @@ namespace YACE {
      * Disabled by default.
      * @param msg The message to be logged
      */
-    void Logger_warning(char* msg, ...);
+    void logger_warning(const char* msg, ...);
 
     /**
      * This function logs error messages to the ERROR buffer.
      * @param msg The message to be logged
      */
-    void Logger_error(char* msg, ...);
+    void logger_error(const char* msg, ...);
 }
 
 #endif /* YACE_LOGGER_H */
