@@ -129,6 +129,9 @@ void YACE::game_loop()
             logger_debug("TPS: %lu, FPS: %lu\n", tps, fps);
         }
     }
+    for (FuncPointer hook : cleanupHooks) {
+        hook();
+    }
 }
 
 void YACE::game_addUpdateHook(FuncPointer function)
@@ -149,9 +152,4 @@ void YACE::game_addCleanupHook(FuncPointer function)
 void YACE::game_stop()
 {
     running = false;
-
-    //Cleanup...
-    for (FuncPointer hook : cleanupHooks) {
-        hook();
-    }
 }
