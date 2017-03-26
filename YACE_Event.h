@@ -189,11 +189,8 @@ namespace YACE {
      * event struct, which is only guaranteed to have the generic eventType
      * field. From there, the user is expected to cast the event struct to
      * the appropiate extended event struct.
-     * This function should return true if the event should be consumed and
-     * it shouldn't be passed along to the other event listeners. If it
-     * returns false the event will be propagated along.
      */
-    typedef bool (*EventCallback)(Event &event);
+    typedef void (*EventCallback)(Event &event);
 
     /**
      * Adds a new event listener that will be notified when an event of the

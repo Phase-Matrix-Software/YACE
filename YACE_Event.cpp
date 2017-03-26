@@ -18,13 +18,14 @@
  */
 
 #include "YACE_Event.h"
-#include <map>
+#include <vector>
+#include <utility>
 
-static std::map<uint32_t, YACE::EventCallback> eventListeners;
+static std::vector< std::pair<uint32_t, YACE::EventCallback> > eventListeners;
 
 void YACE::event_registerListener(YACE::EventCallback function, uint32_t events)
 {
-    eventListeners.insert(
+    eventListeners.push_back(
             std::pair<uint32_t, YACE::EventCallback>(events, function));
 }
 
@@ -32,9 +33,7 @@ void YACE::event_send(YACE::Event &event)
 {
     for(std::pair<uint32_t, YACE::EventCallback> listener : eventListeners) {
         if(listener.first & event.type) {
-            if(listener.second(event)){
-                return;
-            }
+            listener.second(event);
         }
     }
 }

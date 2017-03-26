@@ -21,13 +21,17 @@
 #ifndef YACE_GAME_H
 #define YACE_GAME_H
 
-#define YACE_INIT_WINDOW         1
-#define YACE_INIT_RENDER         2
-#define YACE_INIT_AUDIO          4
-#define YACE_INIT_NETWORK        8
-#define YACE_INIT_DEBUG_OUTPUT   16
-#define YACE_INIT_WARNING_OUTPUT 32
-#define YACE_INIT_ALL     0xff
+#define YACE_INIT_DEBUG_OUTPUT   0x40
+#define YACE_INIT_WARNING_OUTPUT 0x80
+
+#define YACE_INIT_ALL_OUTPUT  (YACE_INIT_DEBUG_OUTPUT|YACE_INIT_WARNING_OUTPUT)
+#define YACE_INIT_ALL (0xFF ~(YACE_INIT_DEBUG_OUTPUT|YACE_INIT_WARNING_OUTPUT))
+
+#define YACE_INIT_WINDOW         0x01
+#define YACE_INIT_RENDER         0x02
+#define YACE_INIT_AUDIO          0x04
+#define YACE_INIT_NETWORK        0x08
+
 
 namespace YACE {
     //Function pointer to be used as arguments for hook functions
