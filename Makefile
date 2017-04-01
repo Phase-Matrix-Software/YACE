@@ -1,7 +1,7 @@
 CPPS=$(wildcard *.cpp)
 OBJDIR=build
 OBJS=$(patsubst %.cpp,$(OBJDIR)/%.o,$(CPPS))
-CFLAGS+= -Wall -fPIC
+CFLAGS+= -std=c++11 -Wall -fPIC
 LFLAGS+= -shared
 
 ifeq ($(OS),Windows_NT)
